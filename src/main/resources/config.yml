@@ -1,0 +1,171 @@
+# ================================================================
+#  ClansMC configuration
+#  Every message shown to players lives in lang/<code>.yml, never here.
+#  Do NOT change 'config-version': the plugin uses it to merge new
+#  keys into your file on update without touching your values.
+# ================================================================
+config-version: 1
+
+# Language file (without extension) loaded from plugins/ClansMC/lang/.
+# Ships with en.yml and ru.yml; drop your own <code>.yml to add a language.
+language: ru
+
+# When true, each player sees messages in their client locale (Player#locale())
+# and falls back to 'language' above when no matching lang file exists.
+per-player-locale: false
+
+# Enable verbose logging for troubleshooting (damage math, XP splits, migrations).
+debug: false
+
+storage:
+  # SQLITE = zero-setup local file. MYSQL = MySQL/MariaDB server (configure below).
+  type: MYSQL
+  sqlite:
+    # File name inside plugins/ClansMC/.
+    file: clans.db
+  mysql:
+    host: 127.0.0.1
+    port: 3306
+    database: clans
+    user: root
+    password: ""
+    # HikariCP connection pool size.
+    pool-size: 10
+    # Extra JDBC properties appended to the connection.
+    properties:
+      useUnicode: "true"
+      characterEncoding: "utf8"
+
+clan:
+  name:
+    # Inclusive length bounds for a clan name. Spaces are allowed.
+    min-length: 3
+    max-length: 16
+    # Case-insensitive substring blacklist. Names containing these are rejected.
+    blacklist: [ "admin", "server", "staff", "fuck", "nigger" ]
+  tag:
+    # A tag is a single [a-zA-Z0-9] word. Case is preserved as typed.
+    min-length: 2
+    max-length: 5
+    # Single MiniMessage colour applied to every tag. Players cannot pick it.
+    color: "<aqua>"
+  # Permission required to run /clan create.
+  create-permission: clans.create
+  dialog:
+    # Seconds before the interactive /clan create dialog times out.
+    timeout-seconds: 60
+
+friendly-fire:
+  # CAP    = clan mates can hit but never kill each other (damage is reduced).
+  # CANCEL = all direct clan-mate damage is cancelled outright.
+  # OFF    = no friendly-fire handling at all.
+  mode: CAP
+  # In CAP mode, the victim always keeps at least this many HP from direct hits.
+  min-health: 0.5
+  # Damage to clan mates' tamed pets (wolves, cats, horses, parrots, golems) is blocked.
+  protect-pets: true
+  # When true, allied clans are treated like clan mates for friendly-fire.
+  include-allies: false
+  # Inside these cuboids friendly-fire is forced to CANCEL (e.g. spawn). No WorldGuard needed.
+  regions:
+    # - world: world
+    #   corner1: { x: -50, y: 0, z: -50 }
+    #   corner2: { x: 50, y: 255, z: 50 }
+
+boss-xp:
+  # Master switch for boss XP sharing.
+  enabled: true
+  # If a contributor is offline when the boss dies, store their share and grant it on join.
+  hold-for-offline: true
+  # Seconds of inactivity after which a boss's damage log entry is discarded (leak guard).
+  damage-timeout-seconds: 600
+  dragon:
+    enabled: true
+    # The Ender Dragon spawns XP orbs during its death animation; setDroppedExp(0) is not enough.
+    # For this many ticks after death, ExperienceOrbs spawning near the death point are removed.
+    suppress-orbs-ticks: 400
+    # Radius (blocks) around the death point in which orbs are suppressed.
+    suppress-radius: 24
+  wither:
+    enabled: true
+
+tab:
+  # INTERNAL         = the plugin sets the tab-list name itself (Player#playerListName).
+  # PLACEHOLDER_ONLY = the plugin never touches the tab; it only exposes PlaceholderAPI
+  #                    placeholders so a tab plugin (e.g. FlectonePulse) can render the tag.
+  #                    Recommended when another plugin already manages the tab list.
+  mode: INTERNAL
+  # MiniMessage format for the tab-list name (INTERNAL mode). Available tags:
+  # <player_name>, <clan_tag>, <clan_name>. The tag colour comes from clan.tag.color.
+  format: "<player_name> <gray>[<clan_tag_colored><gray>]"
+  # Re-apply the tab name every N ticks to override other plugins overwriting it. 0 = off.
+  update-interval: 200
+  # If AuthMe is absent, wait this many ticks after join before applying the tab name.
+  apply-delay-ticks: 20
+
+clan-chat:
+  # Mirror every clan-chat message to the server console.
+  log-to-console: true
+
+notifications:
+  # Announce to the clan when a member joins or leaves the server.
+  join-quit: false
+
+relations:
+  # Seconds an ally request stays pending before it expires.
+  ally-request-timeout-seconds: 120
+
+invite:
+  # Seconds a clan invitation stays valid.
+  expire-seconds: 120
+  # A player cannot be invited again within this many seconds (anti-spam).
+  antispam-seconds: 30
+
+levels:
+  # Master switch for the clan level / perk system.
+  enabled: true
+  # Clan XP awarded for boss kills.
+  xp-rewards:
+    wither: 100
+    dragon: 500
+  # Per-level definitions. 'xp' is the cumulative clan XP required to reach the level.
+  # Perks: max-allies, bank-capacity, glow-unlocked.
+  levels:
+    1:
+      xp: 0
+      max-allies: 1
+      bank-capacity: 10000.0
+      glow-unlocked: false
+    2:
+      xp: 500
+      max-allies: 2
+      bank-capacity: 50000.0
+      glow-unlocked: false
+    3:
+      xp: 1500
+      max-allies: 3
+      bank-capacity: 150000.0
+      glow-unlocked: true
+    4:
+      xp: 4000
+      max-allies: 5
+      bank-capacity: 500000.0
+      glow-unlocked: true
+    5:
+      xp: 10000
+      max-allies: 8
+      bank-capacity: 2000000.0
+      glow-unlocked: true
+
+bank:
+  # Requires Vault + an economy plugin. Auto-disables (with a console warning) if Vault is missing.
+  enabled: false
+
+glow:
+  # Clan glow toggle (/clan glow). LIMITATION: Bukkit cannot show glow to clan mates only,
+  # so the glow is visible to everyone. Requires the clan level perk 'glow-unlocked'.
+  enabled: false
+
+limits:
+  # Maximum members per clan. -1 = unlimited.
+  max-members: -1

@@ -1,0 +1,243 @@
+# ClansMC — русский языковой файл.
+# Значения в формате MiniMessage. Плейсхолдеры: <player>, <clan>, <tag>, <amount>.
+# Значение может быть строкой или списком строк. Отсутствующие ключи берутся из en.yml.
+# Не меняйте 'lang-version' — по нему плагин предупреждает о новых ключах.
+lang-version: 1
+
+# Слово, которым игрок отменяет диалог создания клана и подтверждения.
+cancel-word: отмена
+
+prefix: "<gray>[<aqua>Кланы</aqua>]</gray> "
+
+general:
+  reload-success: "<prefix><green>Конфигурация и языки перезагружены."
+  no-permission: "<prefix><red>У вас нет прав на это действие."
+  players-only: "<prefix><red>Эту команду может использовать только игрок."
+  unknown-clan: "<prefix><red>Клан с названием «<clan>» не найден."
+  unknown-player: "<prefix><red>Игрок «<player>» не найден."
+  player-offline: "<prefix><red>Игрок «<player>» сейчас не в сети."
+  number-invalid: "<prefix><red>«<input>» — не число."
+  usage: "<prefix><yellow>Использование: <gray><usage>"
+
+clan:
+  not-in-clan: "<prefix><red>Вы не состоите в клане."
+  already-in-clan: "<prefix><red>Вы уже состоите в клане."
+  target-already-in-clan: "<prefix><red><player> уже состоит в клане."
+  target-not-in-your-clan: "<prefix><red><player> не состоит в вашем клане."
+  only-leader: "<prefix><red>Это может сделать только лидер клана."
+  leader-cannot-leave: "<prefix><red>Лидер не может выйти. Используйте <white>/clan transfer</white> или <white>/clan disband</white>."
+  member-limit-reached: "<prefix><red>Клан достиг лимита участников (<amount>)."
+  created: "<prefix><green>Клан <white><clan> <gray>[<tag_colored><gray>]</gray> <green>создан!"
+  member-joined: "<prefix><green><player> вступил в клан."
+  member-left: "<prefix><yellow><player> покинул клан."
+  you-left: "<prefix><yellow>Вы покинули клан <white><clan></white>."
+  you-were-kicked: "<prefix><red>Вас исключили из клана <white><clan></white>."
+  member-kicked: "<prefix><yellow><player> исключён из клана."
+  cannot-kick-self: "<prefix><red>Нельзя исключить себя. Используйте <white>/clan disband</white> или <white>/clan transfer</white>."
+  transferred: "<prefix><green>Лидерство передано игроку <white><player></white>."
+  transfer-received: "<prefix><green>Теперь вы лидер клана <white><clan></white>."
+  disbanded: "<prefix><yellow>Клан <white><clan></white> расформирован."
+  join-broadcast: "<prefix><gray><player> зашёл на сервер."
+  quit-broadcast: "<prefix><gray><player> вышел с сервера."
+  confirm-disband:
+    - "<prefix><red>Расформировать клан <white><clan></white>? Это необратимо."
+    - "<prefix><click:run_command:'/clan disband confirm'><green><bold>[Подтвердить]</bold></green></click>  <click:run_command:'/clan cancel'><red>[Отмена]</red></click>"
+  confirm-transfer:
+    - "<prefix><yellow>Передать лидерство в клане <white><clan></white> игроку <white><player></white>?"
+    - "<prefix><click:run_command:'/clan transfer <player> confirm'><green><bold>[Подтвердить]</bold></green></click>  <click:run_command:'/clan cancel'><red>[Отмена]</red></click>"
+  cancelled: "<prefix><gray>Отменено."
+  info:
+    header: "<gray><strikethrough>                    </strikethrough> <white><clan> <gray>[<tag_colored><gray>]</gray> <gray><strikethrough>                    </strikethrough>"
+    leader: "<gray>Лидер: <white><player>"
+    level: "<gray>Уровень: <white><level> <gray>(<white><xp><gray>/<white><xp_next><gray> опыта)"
+    level-max: "<gray>Уровень: <white><level> <gray>(макс.)"
+    created: "<gray>Основан: <white><date>"
+    members: "<gray>Участники: <white><online> в сети<gray>/<white><total> всего"
+    members-list: "<gray>  <white><names>"
+    bank: "<gray>Банк: <white><amount>"
+    allies: "<gray>Союзники: <white><allies>"
+    enemies: "<gray>Враги: <white><enemies>"
+    stats: "<gray>Убийства боссов: <white>Визер <amount_wither> <gray>| <white>Дракон <amount_dragon>"
+    none: "<dark_gray>нет"
+  list:
+    header: "<gray>Кланы — страница <white><page><gray>/<white><pages>"
+    line: "<gray> • <white><clan> <gray>[<tag_colored><gray>]</gray> <dark_gray>— <white><members> <gray>уч., уровень <white><level>"
+    empty: "<prefix><gray>Кланов пока нет."
+    footer: "<gray>Используйте <white>/clan list <page></white> для следующих."
+  members:
+    header: "<gray>Участники клана <white><clan></white>:"
+    online: "<gray> • <green><player> <dark_gray>(<white><role><dark_gray>)"
+    offline: "<gray> • <dark_gray><player> (<role>)"
+
+create:
+  intro: "<prefix><gray>Начато создание клана. Напишите <white>«<cancel>»</white> в любой момент для отмены."
+  prompt-name:
+    - "<prefix><yellow>Шаг 1/3 — введите <white>название</white> клана в чат."
+    - "<prefix><gray>3–16 символов, пробелы разрешены.  <click:run_command:'/clan cancel'><red>[Отмена]</red></click>"
+  prompt-tag:
+    - "<prefix><yellow>Шаг 2/3 — введите <white>тег</white> клана (одно слово)."
+    - "<prefix><gray><min>–<max> символов, только буквы и цифры.  <click:run_command:'/clan cancel'><red>[Отмена]</red></click>"
+  confirm:
+    - "<prefix><yellow>Шаг 3/3 — создать <white><clan> <gray>[<tag_colored><gray>]</gray><yellow>?"
+    - "<prefix><click:run_command:'/clan create-confirm'><green><bold>[Подтвердить]</bold></green></click>  <click:run_command:'/clan cancel'><red>[Отмена]</red></click>"
+  timed-out: "<prefix><red>Время создания клана истекло."
+  cancelled: "<prefix><gray>Создание клана отменено."
+  errors:
+    name-length: "<prefix><red>Название должно быть <white><min>–<max></white> символов. Попробуйте снова."
+    name-blacklisted: "<prefix><red>Такое название запрещено. Выберите другое."
+    name-taken: "<prefix><red>Клан с названием «<clan>» уже существует. Выберите другое."
+    tag-format: "<prefix><red>Тег — одно слово из букв и цифр. Попробуйте снова."
+    tag-length: "<prefix><red>Тег должен быть <white><min>–<max></white> символов. Попробуйте снова."
+    tag-taken: "<prefix><red>Тег «<tag>» уже занят. Выберите другой."
+
+invite:
+  sent: "<prefix><green>Приглашение отправлено игроку <white><player></white>."
+  antispam: "<prefix><red>Вы недавно приглашали <white><player></white>. Подождите немного."
+  received:
+    - "<prefix><green>Вас пригласили в клан <white><clan> <gray>[<tag_colored><gray>]</gray><green>."
+    - "<prefix><hover:show_text:'<green>Вступить в <clan>'><click:run_command:'/clan accept <tag>'><green><bold>[Принять]</bold></green></click></hover>  <hover:show_text:'<red>Отклонить'><click:run_command:'/clan deny <tag>'><red>[Отклонить]</red></click></hover>"
+  accepted-self: "<prefix><green>Вы вступили в клан <white><clan></white>."
+  accepted-broadcast: "<prefix><green><player> принял приглашение."
+  denied-self: "<prefix><gray>Вы отклонили приглашение от <white><clan></white>."
+  denied-broadcast: "<prefix><gray><player> отклонил приглашение."
+  none-pending: "<prefix><gray>У вас нет активных приглашений."
+  no-such-invite: "<prefix><red>У вас нет приглашения от «<clan>»."
+  expired: "<prefix><gray>Приглашение от <white><clan></white> истекло."
+  list-header: "<gray>Активные приглашения:"
+  list-line: "<gray> • <white><clan> <gray>[<tag_colored><gray>]</gray>  <click:run_command:'/clan accept <tag>'><green>[Принять]</green></click> <click:run_command:'/clan deny <tag>'><red>[Отклонить]</red></click>"
+
+chat:
+  format: "<dark_aqua>[Клан]</dark_aqua> <white><player><gray>: <gray><message>"
+  toggle-on: "<prefix><green>Клан-чат включён. Все ваши сообщения уходят в клан."
+  toggle-off: "<prefix><gray>Клан-чат выключен."
+  no-message: "<prefix><yellow>Использование: <white>/cc <сообщение>"
+
+boss:
+  wither-name: "Визера"
+  dragon-name: "Дракона Края"
+  reward: "<prefix><gold>Ваш клан убил <white><boss></white>! Каждый участник получил <white><amount></white> опыта."
+  reward-clan-xp: "<prefix><gold>Клан получил <white><amount></white> кланового опыта."
+
+relations:
+  ally-requested: "<prefix><green>Союз предложен клану <white><clan></white>. Ожидаем их подтверждения."
+  ally-request-received:
+    - "<prefix><green><clan> предлагает вам союз."
+    - "<prefix><click:run_command:'/clan ally <tag>'><green><bold>[Принять]</bold></green></click>  <click:run_command:'/clan unally <tag>'><red>[Отклонить]</red></click>"
+  ally-formed: "<prefix><green>Вы заключили союз с кланом <white><clan></white>."
+  ally-removed: "<prefix><yellow>Союз с кланом <white><clan></white> расторгнут."
+  ally-limit: "<prefix><red>Ваш клан не может иметь больше <white><amount></white> союзов на этом уровне."
+  ally-already: "<prefix><red>Вы уже в союзе с кланом <white><clan></white>."
+  enemy-declared: "<prefix><red>Вы объявили клан <white><clan></white> врагом."
+  enemy-received: "<prefix><red><clan> объявил ваш клан врагом."
+  enemy-removed: "<prefix><yellow>Вы больше не воюете с кланом <white><clan></white>."
+  enemy-already: "<prefix><red><clan> уже ваш враг."
+  cannot-self: "<prefix><red>Нельзя устанавливать отношения с собственным кланом."
+  conflict: "<prefix><red>Клан не может быть одновременно союзником и врагом."
+  no-relation: "<prefix><gray>У вас нет таких отношений с кланом <white><clan></white>."
+
+bank:
+  disabled: "<prefix><red>Клановый банк на этом сервере отключён."
+  balance: "<prefix><gray>Банк клана: <white><amount></white> <gray>(вместимость <white><capacity></white>)."
+  deposited: "<prefix><green>Внесено <white><amount></white>. Новый баланс: <white><balance></white>."
+  withdrew: "<prefix><green>Снято <white><amount></white>. Новый баланс: <white><balance></white>."
+  not-enough-personal: "<prefix><red>У вас нет <white><amount></white> для внесения."
+  not-enough-bank: "<prefix><red>В банке клана нет <white><amount></white>."
+  capacity-exceeded: "<prefix><red>Внесение превысит вместимость банка <white><capacity></white>."
+  amount-positive: "<prefix><red>Сумма должна быть положительной."
+
+glow:
+  disabled: "<prefix><red>Подсветка клана на этом сервере отключена."
+  locked: "<prefix><red>Клан должен достичь более высокого уровня, чтобы открыть подсветку."
+  enabled: "<prefix><green>Подсветка клана включена. <gray>(Внимание: видна всем, не только сокланам.)"
+  disabled-now: "<prefix><gray>Подсветка клана выключена."
+
+gui:
+  main-title: "<dark_gray>Меню клана"
+  members-title: "<dark_gray>Участники — стр. <page>"
+  relations-title: "<dark_gray>Союзники и враги"
+  bank-title: "<dark_gray>Банк клана"
+  settings-title: "<dark_gray>Настройки клана"
+  confirm-title: "<dark_gray>Вы уверены?"
+  item:
+    info-name: "<aqua><clan> <gray>[<tag_colored><gray>]"
+    info-lore:
+      - "<gray>Лидер: <white><leader>"
+      - "<gray>Уровень: <white><level>"
+      - "<gray>Участников: <white><members>"
+    members-name: "<yellow>Участники"
+    members-lore:
+      - "<gray>Просмотр и управление участниками."
+    relations-name: "<light_purple>Союзники и враги"
+    relations-lore:
+      - "<gray>Управление отношениями клана."
+    bank-name: "<gold>Банк"
+    bank-lore:
+      - "<gray>Баланс: <white><amount>"
+    settings-name: "<green>Настройки"
+    settings-lore:
+      - "<gray>Настройки клана."
+    glow-name: "<light_purple>Переключить подсветку"
+    disband-name: "<red>Расформировать клан"
+    invites-name: "<aqua>Приглашения"
+    invites-lore:
+      - "<gray>Ваши активные приглашения."
+    back-name: "<gray>Назад"
+    close-name: "<red>Закрыть"
+    next-page: "<green>Следующая страница"
+    prev-page: "<green>Предыдущая страница"
+    member-online-name: "<green><player>"
+    member-offline-name: "<dark_gray><player>"
+    member-lore-leader:
+      - "<gray>Роль: <white><role>"
+      - ""
+      - "<yellow>ЛКМ: <white>исключить"
+      - "<yellow>ПКМ: <white>передать лидерство"
+    member-lore-plain:
+      - "<gray>Роль: <white><role>"
+    ally-name: "<green><clan>"
+    enemy-name: "<red><clan>"
+    confirm-yes-name: "<green><bold>Подтвердить"
+    confirm-no-name: "<red>Отмена"
+
+errors:
+  generic: "<prefix><red>Что-то пошло не так. Проверьте консоль."
+  storage: "<prefix><red>Ошибка хранилища. Действие могло не сохраниться."
+
+admin:
+  clan-deleted: "<prefix><green>Клан <white><clan></white> удалён."
+  tag-changed: "<prefix><green>Тег клана <clan> теперь <white><tag_colored></white>."
+  name-changed: "<prefix><green>Клан переименован в <white><clan></white>."
+  player-joined: "<prefix><green><player> добавлен в клан <white><clan></white>."
+  player-removed: "<prefix><green><player> удалён из своего клана."
+  leader-set: "<prefix><green><player> назначен лидером клана <white><clan></white>."
+  player-not-in-clan: "<prefix><red><player> не состоит в клане."
+
+help:
+  header: "<gray><strikethrough>            </strikethrough> <aqua>Справка ClansMC <gray><strikethrough>            </strikethrough>"
+  line: "<white><command> <dark_gray>— <gray><desc>"
+  entries:
+    create: "Создать клан (диалог или /clan create <название> <тег>)"
+    add: "Пригласить игрока в клан"
+    accept: "Принять приглашение"
+    deny: "Отклонить приглашение"
+    invites: "Список активных приглашений"
+    info: "Информация о клане"
+    list: "Список всех кланов"
+    members: "Список участников клана"
+    leave: "Выйти из клана"
+    kick: "Исключить участника (лидер)"
+    transfer: "Передать лидерство (лидер)"
+    disband: "Расформировать клан (лидер)"
+    chat: "Переключить клан-чат"
+    cc: "Отправить одно сообщение в клан-чат"
+    ally: "Предложить/принять союз (лидер)"
+    unally: "Разорвать союз (лидер)"
+    enemy: "Объявить врага (лидер)"
+    unenemy: "Убрать врага (лидер)"
+    bank: "Показать клановый банк"
+    deposit: "Внести в банк клана"
+    withdraw: "Снять из банка клана (лидер)"
+    glow: "Переключить подсветку клана (лидер)"
+    menu: "Открыть GUI клана"
+    help: "Показать эту справку"
+    reload: "Перезагрузить конфиг и языки (админ)"

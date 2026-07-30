@@ -1,0 +1,39 @@
+name: ClansMC
+version: '${version}'
+main: io.github.sheynor43.clans.ClansPlugin
+api-version: '1.21'
+authors: [ sheynor43 ]
+description: Feature-rich clans plugin for Purpur/Paper 1.21.11 (friendly-fire cap, boss XP sharing, clan chat, GUI).
+website: https://github.com/sheynor43/ClansMC-1.21.11
+
+dependencies:
+  server:
+    PlaceholderAPI:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    Vault:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    AuthMe:
+      load: BEFORE
+      required: false
+      join-classpath: true
+
+permissions:
+  clans.use:
+    description: Access to the basic /clan commands (info, list, help, join a clan).
+    default: true
+  clans.chat:
+    description: Access to the clan chat (/cc and /clan chat).
+    default: true
+  clans.create:
+    description: Ability to found a new clan. Intended to be granted to VIPs.
+    default: false
+  clans.bypass.friendlyfire:
+    description: Damage dealt by this player to clan mates is never capped.
+    default: false
+  clans.admin:
+    description: Access to /clanadmin and administrative commands (reload, delete, ...).
+    default: op
