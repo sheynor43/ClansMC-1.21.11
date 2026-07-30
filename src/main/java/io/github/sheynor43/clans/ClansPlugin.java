@@ -40,8 +40,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.function.Supplier;
-import java.util.logging.Level;
 
 /**
  * Entry point. Wires every service through constructors (no static singletons
@@ -97,15 +99,25 @@ public final class ClansPlugin extends JavaPlugin {
         this.bossXpService = new BossXpService(this, clanManager, storage, langManager, broadcaster, settings);
         this.menuManager = new MenuManager(this);
 
+        // Initialise storage BEFORE registering commands: if the database is
+        // unreachable we disable cleanly, leaving no half-registered ("ghost")
+        // commands that would crash with a closed class loader when used.
+        if (!initStorage()) {
+            return;
+        }
+
         registerListeners();
         registerCommands();
         registerHooks(economy != null);
         scheduleTasks();
-
         getServer().getServicesManager().register(ClansAPI.class, clanManager, this, ServicePriority.Normal);
 
-        initStorageAsync();
-        getLogger().info("ClansMC enabled (storage: " + settings().storageType() + ").");
+        tabManager.applyAll();
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            glowManager.applyForJoin(player);
+        }
+        getLogger().info("ClansMC enabled (storage: " + settings().storageType() + ", "
+                + clanManager.getClans().size() + " clan(s) loaded).");
     }
 
     @Override
@@ -130,20 +142,42 @@ public final class ClansPlugin extends JavaPlugin {
         return new MysqlClanStorage(settings(), getClassLoader(), getLogger());
     }
 
-    private void initStorageAsync() {
-        storage.init()
-                .thenCompose(v -> clanManager.loadAll())
-                .thenRun(() -> Bukkit.getScheduler().runTask(this, () -> {
-                    tabManager.applyAll();
-                    for (Player player : Bukkit.getOnlinePlayers()) {
-                        glowManager.applyForJoin(player);
-                    }
-                }))
-                .exceptionally(ex -> {
-                    getLogger().log(Level.SEVERE, "Failed to initialise storage; disabling plugin.", ex);
-                    Bukkit.getScheduler().runTask(this, () -> getServer().getPluginManager().disablePlugin(this));
-                    return null;
-                });
+    /**
+     * Opens the pool, runs migrations and loads the cache synchronously (once, at
+     * startup). All gameplay operations stay asynchronous; only this one-time
+     * bootstrap blocks, so a misconfigured database fails fast and cleanly.
+     *
+     * @return {@code true} on success; {@code false} after disabling the plugin.
+     */
+    private boolean initStorage() {
+        try {
+            storage.init().get(30, TimeUnit.SECONDS);
+            clanManager.loadAll().get(30, TimeUnit.SECONDS);
+            return true;
+        } catch (InterruptedException ex) {
+            Thread.currentThread().interrupt();
+            return failStorage(ex);
+        } catch (ExecutionException | TimeoutException ex) {
+            return failStorage(ex);
+        }
+    }
+
+    private boolean failStorage(Exception ex) {
+        Throwable cause = rootCause(ex);
+        getLogger().severe("Could not initialise " + settings().storageType() + " storage: " + cause.getMessage());
+        getLogger().severe("Fix storage settings in plugins/ClansMC/config.yml (host, database, user, password), "
+                + "or set 'storage.type: SQLITE' for zero-setup local storage, then restart. Disabling ClansMC.");
+        storage.shutdown();
+        getServer().getPluginManager().disablePlugin(this);
+        return false;
+    }
+
+    private static Throwable rootCause(Throwable throwable) {
+        Throwable current = throwable;
+        while (current.getCause() != null && current.getCause() != current) {
+            current = current.getCause();
+        }
+        return current;
     }
 
     private void registerListeners() {
