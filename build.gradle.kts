@@ -71,8 +71,11 @@ tasks {
         archiveClassifier.set("")
 
         relocate("com.zaxxer.hikari", "$relocateBase.hikari")
-        relocate("org.sqlite", "$relocateBase.sqlite")
         relocate("org.mariadb.jdbc", "$relocateBase.mariadb")
+        // NOTE: org.sqlite is deliberately NOT relocated. sqlite-jdbc ships a
+        // native (JNI) library whose symbols are bound to the "org.sqlite"
+        // package name; relocating the classes breaks _open_utf8 at runtime.
+        // Paper isolates plugin class loaders, so leaving it unrelocated is safe.
 
         // Merge JDBC driver service files so both drivers register via ServiceLoader.
         // No minimize(): it strips driver service entries and reflectively-loaded classes.

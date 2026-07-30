@@ -32,8 +32,8 @@ public final class HikariProvider {
         registerDrivers(classLoader);
         HikariConfig config = new HikariConfig();
         config.setPoolName("ClansMC-SQLite");
-        // Shadow relocates this string constant to the shaded package at build time,
-        // so Hikari loads the bundled driver through the plugin class loader.
+        // sqlite-jdbc is bundled unrelocated (its JNI native library requires the
+        // original org.sqlite package), so this name is used as-is at runtime.
         config.setDriverClassName("org.sqlite.JDBC");
         config.setJdbcUrl("jdbc:sqlite:" + databaseFile.getAbsolutePath());
         // SQLite has a single writer; serialise access to avoid "database is locked".
